@@ -1,0 +1,85 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{53C58219-49CD-4227-89F1-3EE57ED9C9B8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>eFlow.CollectionManagement</RootNamespace>
+    <AssemblyName>eFlow.SDK.CM</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>T:\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>T:\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TableDetection, Version=4.5.1.0, Culture=neutral, PublicKeyToken=0752346849557bc9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>T:\\TableDetection.dll</HintPath>
+    </Reference>
+    <Reference Include="TiS.Core.eFlowAPI, Version=4.5.1.0, Culture=neutral, PublicKeyToken=0752346849557bc9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>T:\\TiS.Core.eFlowAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TiS.Core.eFlowInterfaces, Version=4.5.1.0, Culture=neutral, PublicKeyToken=0752346849557bc9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>T:\\TiS.Core.eFlowInterfaces.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TiS.Core.PlatformRuntime, Version=4.5.1.0, Culture=neutral, PublicKeyToken=0752346849557bc9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>T:\\TiS.Core.PlatformRuntime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TiS.Core.Workflow, Version=4.5.1.0, Culture=neutral, PublicKeyToken=0752346849557bc9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>T:\\TiS.Core.Workflow.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TiS.Core.Workflow.WFCommon, Version=4.5.1.0, Culture=neutral, PublicKeyToken=0752346849557bc9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>T:\\TiS.Core.Workflow.WFCommon.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="TiS.TisCommon, Version=4.5.1.0, Culture=neutral, PublicKeyToken=0752346849557bc9, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>T:\\TiS.TisCommon.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BatchInternals.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Batch.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

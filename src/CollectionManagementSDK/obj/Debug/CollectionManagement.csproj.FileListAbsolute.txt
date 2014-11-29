@@ -1,0 +1,6 @@
+T:\eFlow.SDK.CM.dll
+C:\Program Files (x86)\TIS\eFlow 5\Bin\eFlow.SDK.CM.dll
+C:\Program Files (x86)\TIS\eFlow 5\Bin\eFlow.SDK.CM.pdb
+C:\Eduardo\CollectionManagementSDK\CollectionManagementSDK\obj\Debug\CollectionManagement.csprojResolveAssemblyReference.cache
+C:\Eduardo\CollectionManagementSDK\CollectionManagementSDK\obj\Debug\eFlow.SDK.CM.dll
+C:\Eduardo\CollectionManagementSDK\CollectionManagementSDK\obj\Debug\eFlow.SDK.CM.pdb

@@ -1,0 +1,657 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>eFlow.SDK.CM</name>
+    </assembly>
+    <members>
+        <member name="T:eFlow.CollectionManagement.BatchInternals">
+            <summary>
+            "BatchInternals" Class --> Is an internal wrapper class that performs atomic operations around a ITisCollectionData object. 
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.BatchInternals.disposed">
+            <summary>
+            When set to true indicates that the instance of the class has been disposed
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.BatchInternals.applicationName">
+            <summary>
+            Name of the eFLOW application logged on to the CSM
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.BatchInternals.stationName">
+            <summary>
+            Name of the eFLOW station logged on to the CSM
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.BatchInternals.oCSM">
+            <summary>
+            CSM object instance
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.BatchInternals.collections">
+            <summary>
+            List of Collections recently loaded through a Batch->Get() or Batch->FromDynamic()
+            </summary>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.#ctor(System.String,System.String)">
+            <summary>
+            [Constructor] BatchInternals() --> Initializes a Batch object instance with the eFLOW application and station names.
+            </summary>
+            <param name="applicationName">Indicates the name of the eFLOW application to login to.</param>
+            <param name="stationName">Indicates the name of the eFLOW station to login to.</param>
+            <example><code>BatchInternals b = new BatchInternals("SimpleDemo", "Completion");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.#ctor">
+            <summary>
+            [Constructor] BatchInternals() --> Initializes a Batch object instance.
+            </summary>
+            <example><code>BatchInternals b = new BatchInternals();</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.Finalize">
+            <summary>
+            [Destructor] BatchInternals() --> Releases unmanaged resources and performs other cleanup operations before the is reclaimed by garbage collection.
+            </summary>
+            <remarks>We must implement a finalizer to guarantee that the native CSM object is cleaned up</remarks>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.Dispose(System.Boolean)">
+            <summary>
+            Releases unmanaged and - optionally - managed resources
+            </summary>
+            <param name="disposing"><c>true</c> to release both managed and unmanaged resources; <c>false</c> to release only unmanaged resources.</param>
+            <remarks>
+            If the main class was marked as sealed, we could just make this a private void Dispose(bool).  Alternatively, we could (in this case) put
+            all of our logic directly in Dispose().
+            </remarks>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.Dispose">
+            <summary>
+            Batch.Dispose() --> Performs Batch defined tasks associated with freeing, releasing, or resetting managed and unmanaged resources.
+            </summary>
+            <example><code>b.Dispose();</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.InternalHistory(TiS.Core.eFlowAPI.ITisCollectionData)">
+            <summary>
+            Batch->InternalHistory() --> Returns a list of the stations a collection has gone through (when processed normally through the workflow).
+            </summary>
+            <param name="Collection">Is a ITisCollectionData object.</param>
+            <returns>Returns a string array if the collection has any history, otherwise returns an empty array.</returns>
+            <example><code>string[] history = b.InternalHistory(collData);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.CoreHistory(System.Collections.Generic.List{System.String}@,TiS.Core.eFlowAPI.ITisClientServicesModule@,System.String)">
+            <summary>
+            [Static] Batch.CoreHistory() --> Used by the InternalHistory functions.
+            </summary>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.InternalHistory(System.String,System.String,System.String)">
+            <summary>
+            [Static] Batch.InternalHistory() --> Returns a list of the stations a collection has gone through (when processed normally through the workflow).
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name.</param>
+            <param name="CollectionName">Indicates the collection name to be checked.</param>
+            <example><code>string[] history = Batch.InternalHistory("SimpleDemo", "Completion", "000002349_0001");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.InternalHistoryMany(System.String,System.String,System.String[])">
+            <summary>
+            [Static] Batch.InternalHistoryMany() --> Returns a list of the stations, the collections have gone through (when processed normally through the workflow).
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to log on to the CSM.</param>
+            <param name="CollectionNames">Indicates the collection names to be checked.</param>
+            <returns>Returns a multidimensional string array if the collections have any history, otherwise returns an empty sub array per collection.</returns>
+            <example><code>string[][] history = Batch.HistoryMany("SimpleDemo", "Completion", new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.ReturnPriorityLevels(eFlow.CollectionManagement.BatchInternals.Priority,TiS.Core.eFlowAPI.WorkflowPriorityLevel@,System.Double@)">
+            <summary>
+            [Static] Batch.ReturnPriorityLevels() --> Returns the WorkflowPriorityLevel and AbsolutePriority values given the Priority value.
+            </summary>
+            <param name="priority">The Priority value.</param>
+            <param name="wfp">The equivalent WorkflowPriorityLevel for the given Priority value.</param>
+            <param name="abs">The equivalent AbsolutePriority for the given Priority value.</param>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.CheckLogon">
+            <summary>
+            Batch->CheckLogon() --> Returns true if the oCSM, ApplicationName and StationName parameters are set correctly.
+            </summary>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.InternalPut(TiS.Core.eFlowAPI.ITisCollectionData,System.Boolean,System.String)">
+            <summary>
+            Batch->InternalPut() --> Used by Put, Reject or Free collection.
+            </summary>
+            <param name="Collection">Is a ITisCollectionData object.</param>
+            <param name="put">A boolean - if true, indicates a Put collection operation, if false indicates a free collection operation.</param>
+            <param name="method">The name of the method, either a Put, Reject or Free collection.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.CorePut(TiS.Core.eFlowAPI.ITisClientServicesModule@,System.String,System.String,System.Boolean)">
+            <summary>
+            [Static] Batch.CorePut() --> Core / heart of Put, Reject or Free collection.
+            </summary>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.InternalPut(System.String,System.String,System.String,System.Boolean,System.String)">
+            <summary>
+            [Static] Batch.InternalPut() --> Used by Put, Reject or Free collection.
+            </summary>
+            <param name="CollectionName">Indicates the collection name.</param>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name.</param>
+            <param name="put">A boolean - if true, indicates a Put collection operation, if false indicates a free collection operation.</param>
+            <param name="method">The name of the method, either a Put, Reject or Free collection.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.InternalPutMany(System.String,System.String,System.String[],System.Boolean,System.String)">
+            <summary>
+            [Static] Batch.InternalPutMany() --> Used by Put, Reject or Free collection.
+            </summary>
+            <param name="CollectionNames">Indicates the collection names to process.</param>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to log on to the CSM.</param>
+            <param name="put">A boolean - if true, indicates a Put collection operation, if false indicates a free collection operation.</param>
+            <param name="method">The name of the method, either a Put, Reject or Free collection.</param>
+            <returns>Returns true is successful (no exceptions occur), otherwise false.</returns>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.CoreInternalPrioritizeHold(TiS.Core.eFlowAPI.ITisClientServicesModule@,System.String,System.String,System.String,eFlow.CollectionManagement.BatchInternals.Priority,System.String,System.Boolean)">
+            <summary>
+            [Static] Batch.CoreInternalPrioritizeHold() --> Core: Places a collection on Hold.
+            </summary>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.InternalPrioritizeHold(System.String,System.String,System.String,System.String,eFlow.CollectionManagement.BatchInternals.Priority,System.String,System.Boolean)">
+            <summary>
+            [Static] Batch.InternalPrioritizeHold() --> Places a collection on Hold.
+            </summary>
+            <param name="CollectionName">Indicates the collection name.</param>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name.</param>
+            <param name="toStationName">Indicates the station name where to move the collection.</param>
+            <param name="priority">Is a Priority value, which indicates the collection's priority.</param>
+            <param name="operation">Type of operation to execute: Hold / Prioritize.</param>
+            <param name="hold">True indicates on Hold.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.InternalPrioritizeHold("SimpleDemo", "Completion", "", "000002349_0001", Batch.Priority.High, Constants.cStrHoldMethod, true);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.InternalPrioritizeHoldMany(System.String,System.String,System.String,System.String[],eFlow.CollectionManagement.BatchInternals.Priority,System.String,System.Boolean)">
+            <summary>
+            [Static] Batch.InternalPrioritizeHoldMany() --> Places collections on Hold.
+            </summary>
+            <param name="CollectionNames">Indicates the collection names.</param>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name.</param>
+            <param name="toStationName">Indicates the station name where to move the collection.</param>
+            <param name="priority">Is a Priority value, which indicates the collection's priority.</param>
+            <param name="operation">Type of operation to execute: Hold / Prioritize.</param>
+            <param name="hold">True indicates on Hold.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.InternalPrioritizeHoldMany("SimpleDemo", "Completion", "", new string[] { "000002349_0001", "000002349_0002" }, Batch.Priority.High, Constants.cStrHoldMethod, true);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.CoreInternalPrioritizeHold(System.String,eFlow.CollectionManagement.BatchInternals.Priority,System.String,System.Boolean,System.String)">
+            <summary>
+            Batch->CoreInternalPrioritizeHold() --> Core: Places a collection on Hold.
+            </summary>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.InternalPrioritizeHold(System.String,eFlow.CollectionManagement.BatchInternals.Priority,System.String,System.Boolean,System.String)">
+            <summary>
+            Batch->InternalPrioritizeHold() --> Places a collection on Hold.
+            </summary>
+            <remarks>Cannot be executed on a batch that has a Get() on it (a locked batch).</remarks>
+            <param name="CollectionName">Indicate the collection name to prioritize.</param>
+            <param name="priority">Is a Priority value, which indicates the collection's priority.</param>
+            <param name="operation">Type of operation to execute: Hold / Prioritize.</param>
+            <param name="hold">True indicates on Hold.</param>
+            <param name="toStationName">Indicates the station name where to move the collection.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>b.InternalPrioritizeHold("000002349_0001", Batch.Priority.High, Constants.cStrHoldMethod, true, "");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.InternalPrioritizeHoldMany(System.String[],eFlow.CollectionManagement.BatchInternals.Priority,System.String,System.Boolean,System.String)">
+            <summary>
+            Batch->InternalPrioritizeHoldMany() --> Places collections on Hold.
+            </summary>
+            <remarks>Cannot be executed on a batch that has a Get() on it (a locked batch).</remarks>
+            <param name="CollectionNames">Indicate the collection names to prioritize.</param>
+            <param name="priority">Is a Priority value, which indicates the collection's priority.</param>
+            <param name="operation">Type of operation to execute: Hold / Prioritize.</param>
+            <param name="hold">True indicates on Hold.</param>
+            <param name="toStationName">Indicates the station name where to move the collection.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>b.InternalPrioritizeHoldMany(new string[] { "000002349_0001", "000002349_0002" }, Batch.Priority.High, Constants.cStrHoldMethod, true, "");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.CoreFromDynamic(System.Collections.Generic.List{TiS.Core.eFlowAPI.ITisCollectionData}@,TiS.Core.eFlowAPI.ITisClientServicesModule@,System.String)">
+            <summary>
+            Batch->CoreFromDynamic() --> Core: Imports collection(s) given by a file name.
+            </summary>
+        </member>
+        <member name="M:eFlow.CollectionManagement.BatchInternals.Logout">
+            <summary>
+            Batch->Logout() --> Logs out from the CSM.
+            </summary>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = b.Logout();</code></example>
+        </member>
+        <member name="P:eFlow.CollectionManagement.BatchInternals.CollectionsLoaded">
+            <summary>
+            Read Only - List of Collections recently loaded through a Batch->Get() or Batch->FromDynamic()
+            </summary>
+            <example><code>string[] cols = b.CollectionsLoaded;</code></example>
+        </member>
+        <member name="P:eFlow.CollectionManagement.BatchInternals.ApplicationName">
+            <summary>
+            Name of the eFLOW application logged on to the CSM
+            </summary>
+            <example><code>b.ApplicationName = "SimpleDemo";</code></example>
+        </member>
+        <member name="P:eFlow.CollectionManagement.BatchInternals.StationName">
+            <summary>
+            Name of the eFLOW station logged on to the CSM
+            </summary>
+            <example><code>b.StationName = "Completion";</code></example>
+        </member>
+        <member name="T:eFlow.CollectionManagement.BatchInternals.Priority">
+            <summary>
+            Enumeration of Collection priorities
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.BatchInternals.Priority.Low">
+            <summary>
+             Indicates a Low Priority
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.BatchInternals.Priority.Normal">
+            <summary>
+             Indicates a Normal Priority
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.BatchInternals.Priority.AboveNormal">
+            <summary>
+             Indicates an AboveNormal Priority
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.BatchInternals.Priority.High">
+            <summary>
+             Indicates a High Priority
+            </summary>
+        </member>
+        <member name="T:eFlow.CollectionManagement.Constants">
+            <summary>
+            "Constants" Class --> Constants used by the Batch class. 
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.Constants.cStrLiteSdk">
+            <summary>
+            SDK specific
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.Constants.cStrCouldNotLogin">
+            <summary>
+            Message / exception specific
+            </summary>
+        </member>
+        <member name="F:eFlow.CollectionManagement.Constants.cStrPrioritizeMethod">
+            <summary>
+            Methods specific
+            </summary>
+        </member>
+        <member name="T:eFlow.CollectionManagement.Batch">
+            <summary>
+            "Batch" Class --> Is a wrapper class that performs atomic operations around a ITisCollectionData object. 
+            </summary>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.#ctor(System.String,System.String)">
+            <summary>
+            [Constructor] Batch() --> Initializes a Batch object instance with the eFLOW application and station names.
+            </summary>
+            <param name="applicationName">Indicates the name of the eFLOW application to login to.</param>
+            <param name="stationName">Indicates the name of the eFLOW station to login to.</param>
+            <example><code>Batch b = new Batch("SimpleDemo", "Completion");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.#ctor">
+            <summary>
+            [Constructor] Batch() --> Initializes a Batch object instance.
+            </summary>
+            <example><code>Batch b = new Batch();</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Finalize">
+            <summary>
+            [Destructor] Batch() --> Releases unmanaged resources and performs other cleanup operations before the is reclaimed by garbage collection.
+            </summary>
+            <remarks>We must implement a finalizer to guarantee that the native CSM object is cleaned up</remarks>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.History(TiS.Core.eFlowAPI.ITisCollectionData)">
+            <summary>
+            Batch->History() --> Returns a list of the stations a collection has gone through (when processed normally through the workflow).
+            </summary>
+            <param name="Collection">Is a ITisCollectionData object.</param>
+            <returns>Returns a string array if the collection has any history, otherwise returns an empty array.</returns>
+            <example><code>string[] history = b.History(collData);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.History(System.String,System.String,System.String)">
+            <summary>
+            [Static] Batch.History() --> Returns a list of the stations a collection has gone through (when processed normally through the workflow).
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to logon to the CSM. It must be the same station where you intend to get the collection's history from.</param>
+            <param name="CollectionName">Indicates the collection name to be checked.</param>
+            <returns>Returns a string array if the collection has any history, otherwise returns an empty array.</returns>
+            <example><code>string[] history = Batch.History("SimpleDemo", "Completion", "000002349_0001");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.HistoryMany(System.String,System.String,System.String[])">
+            <summary>
+            [Static] Batch.HistoryMany() --> Returns a list of the stations, the collections have gone through (when processed normally through the workflow).
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to logon to the CSM. It must be the same station where you intend to get the collections history from.</param>
+            <param name="CollectionNames">Indicates the collection names to be checked.</param>
+            <returns>Returns a multidimensional string array if the collections have any history, otherwise returns an empty sub array per collection.</returns>
+            <example><code>string[][] history = Batch.HistoryMany("SimpleDemo", "Completion", new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Release(System.String)">
+            <summary>
+            Batch->Release() --> Releases a collection that is on Hold.
+            </summary>
+            <remarks>Cannot be executed on a batch that has a Get() on it (a locked batch).</remarks>
+            <param name="CollectionName">Indicate the collection name to be released.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>b.Release("000002349_0001");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.ReleaseMany(System.String[])">
+            <summary>
+            Batch->ReleaseMany() --> Releases collections that are on Hold.
+            </summary>
+            <remarks>Cannot be executed on a batch that has a Get() on it (a locked batch).</remarks>
+            <param name="CollectionNames">Indicate the collection names to be released.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>b.ReleaseMany(new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Release(System.String,System.String,System.String)">
+            <summary>
+            [Static] Batch.Release() --> Releases a collection that is on Hold.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name.</param>
+            <param name="CollectionName">Indicates the collection name to be released.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.Release("SimpleDemo", "Completion", "000002349_0001");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.ReleaseMany(System.String,System.String,System.String[])">
+            <summary>
+            [Static] Batch.ReleaseMany() --> Releases collections that are on Hold.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name.</param>
+            <param name="CollectionNames">Indicates the collection names to be released.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.ReleaseMany("SimpleDemo", "Completion", new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Move(System.String,System.String)">
+            <summary>
+            Batch->Move() --> Moves a collection to another station.
+            </summary>
+            <remarks>Cannot be executed on a batch that has a Get() on it (a locked batch).</remarks>
+            <param name="CollectionName">Indicate the collection name to be moved.</param>
+            <param name="toStationName">Indicates the station name where they collection will be moved to.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>b.Move("000002349_0001", "Pending");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.MoveMany(System.String[],System.String)">
+            <summary>
+            Batch->MoveMany() --> Moves collections to another station.
+            </summary>
+            <remarks>Cannot be executed on a batch that has a Get() on it (a locked batch).</remarks>
+            <param name="CollectionNames">Indicate the collection names to be moved.</param>
+            <param name="toStationName">Indicates the station name where they collections will be moved to.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>b.MoveMany(new string[] { "000002349_0001", "000002349_0002" }, "Pending");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Move(System.String,System.String,System.String,System.String)">
+            <summary>
+            [Static] Batch.Move() --> Moves a collection to another station.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name used to log on to the CSM.</param>
+            <param name="toStationName">Indicates the station name where they collection will be moved to.</param>
+            <param name="CollectionName">Indicates the collection name to be moved.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.Move("SimpleDemo", "Completion", "Pending", "000002349_0001");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.MoveMany(System.String,System.String,System.String,System.String[])">
+            <summary>
+            [Static] Batch.MoveMany() --> Moves collections to another station.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name used to log on to the CSM.</param>
+            <param name="toStationName">Indicates the station name where they collections will be moved to.</param>
+            <param name="CollectionNames">Indicates the collection names to be moved.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.MoveMany("SimpleDemo", "Completion", "Pending", new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Hold(System.String)">
+            <summary>
+            Batch->Hold() --> Places a collection on Hold.
+            </summary>
+            <remarks>Cannot be executed on a batch that has a Get() on it (a locked batch).</remarks>
+            <param name="CollectionName">Indicate the collection name to set on hold.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>b.Hold("000002349_0001");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.HoldMany(System.String[])">
+            <summary>
+            Batch->HoldMany() --> Places collections on Hold.
+            </summary>
+            <remarks>Cannot be executed on a batch that has a Get() on it (a locked batch).</remarks>
+            <param name="CollectionNames">Indicate the collection names to be set on hold.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>b.HoldMany(new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Hold(System.String,System.String,System.String)">
+            <summary>
+            [Static] Batch.Hold() --> Places a collection on Hold.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to log on to the CSM.</param>
+            <param name="CollectionName">Indicates the collection name to set on hold.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.Hold("SimpleDemo", "Completion", "000002349_0001");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.HoldMany(System.String,System.String,System.String[])">
+            <summary>
+            [Static] Batch.HoldMany() --> Places collections on Hold.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to log on to the CSM.</param>
+            <param name="CollectionNames">Indicates the collection names to be set on hold.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.HoldMany("SimpleDemo", "Completion", new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Prioritize(System.String,eFlow.CollectionManagement.BatchInternals.Priority)">
+            <summary>
+            Batch->Prioritize() --> Prioritizes a collection.
+            </summary>
+            <remarks>Cannot be executed on a batch that has a Get() on it (a locked batch).</remarks>
+            <param name="CollectionName">Indicate the collection name to prioritize - a collection on the logged on station.</param>
+            <param name="priority">Is a Priority value, which indicates the collection's priority.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>b.Prioritize("000002349_0001", Batch.Priority.AboveNormal);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.PrioritizeMany(System.String[],eFlow.CollectionManagement.BatchInternals.Priority)">
+            <summary>
+            Batch->PrioritizeMany() --> Prioritizes collections.
+            </summary>
+            <remarks>Cannot be executed on a batch that has a Get() on it (a locked batch).</remarks>
+            <param name="CollectionNames">Indicate the collection names to prioritize - collections on the logged on station.</param>
+            <param name="priority">Is a Priority value, which indicates the collection's priority.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>b.PrioritizeMany(new string[] { "000002349_0001", "000002349_0002" }, Batch.Priority.AboveNormal);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Prioritize(System.String,System.String,System.String,eFlow.CollectionManagement.BatchInternals.Priority)">
+            <summary>
+            [Static] Batch.Prioritize() --> Prioritizes a collection.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name where the collection will be prioritized.</param>
+            <param name="CollectionName">Indicates the collection name.</param>
+            <param name="priority">Is a Priority value, which indicates the collection's priority.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.Prioritize("SimpleDemo", "Completion", "000002349_0001", Batch.Priority.High);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.PrioritizeMany(System.String,System.String,System.String[],eFlow.CollectionManagement.BatchInternals.Priority)">
+            <summary>
+            [Static] Batch.PrioritizeMany() --> Prioritizes collections.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name where the collections will be prioritized.</param>
+            <param name="CollectionNames">Indicates the collection names.</param>
+            <param name="priority">Is a Priority value, which indicates the collections priority.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.PrioritizeMany("SimpleDemo", "Completion", new string[] { "000002349_0001", "000002349_0002" }, Batch.Priority.High);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.FromDynamic(System.String)">
+            <summary>
+            Batch->FromDynamic() --> Imports collection(s) given by a file name.
+            </summary>
+            <param name="filename">Represents the file name from where the collection(s) will be imported.</param>
+            <returns>Returns a ITisCollectionData array if successful, otherwise null.</returns>
+            <example><code>ITisCollectionData[] collDatas = b.FromDynamic(@"c:\temp\test.dynamic");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.FromDynamic(System.String,System.String,System.String)">
+            <summary>
+            [Static] Batch.FromDynamic() --> Imports collection(s) given by a file name.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to logon to the CSM.</param>
+            <param name="filename">Represents the file name from where the collection(s) will be imported.</param>
+            <returns>Returns a string array if successful with the names of the imported collections, otherwise an empty array.</returns>
+            <example><code>string[] collDatas = Batch.FromDynamic("SimpleDemo", "efInternal", @"c:\temp\test.dynamic");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.ToDynamic(System.String,System.String[])">
+            <summary>
+            Batch->ToDynamic() --> Exports the collections given by CollectionNames to a .dynamic file.
+            </summary>
+            <param name="filename">Represents the file name where the .dynamic will be exported to.</param>
+            <param name="CollectionNames">Represents the names of the collections to export as a .dynamic file.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = b.ToDynamic(@"c:\temp\test.dynamic", new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.ToDynamic(System.String,System.String,System.String,System.String[])">
+            <summary>
+            [Static] Batch.ToDynamic() --> Exports the collections given by CollectionNames to a .dynamic file.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to logon to the CSM.</param>
+            <param name="filename">Represents the file name where the .dynamic will be exported to.</param>
+            <param name="CollectionNames">Represents the names of the collections to export as a .dynamic file.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = Batch.ToDynamic("SimpleDemo", "efInternal", @"c:\temp\test.dynamic", new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Logout">
+            <summary>
+            Batch->Logout() --> Logs out from the CSM.
+            </summary>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = b.Logout();</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Login(System.String,System.String)">
+            <summary>
+            Batch->Login() --> Login to the CSM using applicationName and stationName.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name to login to.</param>
+            <param name="stationName">Indicates the eFLOW station name to login to.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = b.Login("SimpleDemo", "Completion");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Login">
+            <summary>
+            Batch->Login() --> Login to the CSM (if the Batch.ApplicationName and Batch.StationName properties have been previously set).
+            </summary>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = b.Login();</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Put(TiS.Core.eFlowAPI.ITisCollectionData)">
+            <summary>
+            Batch->Put() --> Puts a ITisCollectionData object (saves it and moves it to the next queue).
+            </summary>
+            <param name="Collection">Is a ITisCollectionData object.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = b.Put(collData);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Free(TiS.Core.eFlowAPI.ITisCollectionData)">
+            <summary>
+            Batch->Free() --> Releases a ITisCollectionData object (saves it and keeps it in the same queue).
+            </summary>
+            <param name="Collection">Is a ITisCollectionData object.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = b.Free(collData);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Delete(TiS.Core.eFlowAPI.ITisCollectionData)">
+            <summary>
+            Batch->Delete() --> Deletes a ITisCollectionData object from the system (even if the collection is locked).
+            </summary>
+            <remarks>
+            Attention: Even if the collection is locked, it will be deleted!
+            </remarks>
+            <param name="Collection">Is a ITisCollectionData object.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = b.Delete(collData);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Delete(System.String,System.String,System.String)">
+            <summary>
+            [Static] Batch.Delete() --> Deletes a ITisCollectionData object from the system (even if the collection is locked), given the collection name.
+            </summary>
+            <remarks>
+            Attention: Even if the collection is locked, it will be deleted!
+            </remarks>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to logon to the CSM. It must be the same station where you intend to delete the collection from.</param>
+            <param name="CollectionName">The collection name to delete.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = Batch.Delete("SimpleDemo", "Completion", "000002349_0001");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.DeleteMany(System.String,System.String,System.String[])">
+            <summary>
+            [Static] Batch.DeleteMany() --> Deletes ITisCollectionData objects from the system (even if the collections are locked), given the collections names.
+            </summary>
+            <remarks>
+            Attention: Even if the collections are locked, they will be deleted!
+            </remarks>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to logon to the CSM. It must be the same station where you intend to delete the collections from.</param>
+            <param name="CollectionNames">The collection names to delete.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = Batch.DeleteMany("SimpleDemo", "Completion", new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Reject(TiS.Core.eFlowAPI.ITisCollectionData)">
+            <summary>
+            Batch->Reject() --> Rejects a ITisCollectionData object.
+            </summary>
+            <param name="Collection">Is a ITisCollectionData object.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>bool result = b.Reject(collData);</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Reject(System.String,System.String,System.String)">
+            <summary>
+            [Static] Batch.Reject() --> Rejects a collection given the collection's name.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to logon to the CSM. It must be the same station where you intend to reject the collection from.</param>
+            <param name="CollectionName">Indicates the collection name to reject.</param>
+            <returns>Returns true is successful, otherwise false.</returns>
+            <example><code>Batch.Reject("SimpleDemo", "Completion", "000002349_0001");</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.RejectMany(System.String,System.String,System.String[])">
+            <summary>
+            [Static] Batch.RejectMany() --> Rejects several collection given the collection names.
+            </summary>
+            <param name="applicationName">Indicates the eFLOW application name.</param>
+            <param name="stationName">Indicates the station name to logon to the CSM. It must be the same station where you intend to reject the collections from.</param>
+            <param name="CollectionNames">Indicates the collection names to reject.</param>
+            <returns>Returns true is successful (if all collections were processed fine - with no exceptions), otherwise false.</returns>
+            <example><code>Batch.RejectMany("SimpleDemo", "Completion", new string[] { "000002349_0001", "000002349_0002" });</code></example>
+        </member>
+        <member name="M:eFlow.CollectionManagement.Batch.Get(System.String)">
+            <summary>
+            Batch.Get() --> Retrieves a ITisCollectionData object given the collection name (if it exists), otherwise returns null.
+            </summary>
+            <param name="CollectionName">Is a string which indicates the name of the collection to retrieve.</param>
+            <returns>Returns an ITisCollectionData object if the collection name exists, otherwise returns null.</returns>
+            <example><code>ITisCollectionData collData = b.Get("000002349_0001");</code></example>
+        </member>
+    </members>
+</doc>
